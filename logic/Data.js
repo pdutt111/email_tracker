@@ -28,7 +28,7 @@ var runs={
     updateTracker:function(req){
         var def=q.defer();
         try{
-            // console.log(JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg",""))));
+             console.log(JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg",""))));
             var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
             connection.connect();
             connection.query("update "+input.table+" set "+input.field+"=1 where email="+input.email+" and campaign_id="+input.campaign_id,function(err,results,fields){
