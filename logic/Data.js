@@ -39,6 +39,21 @@ var runs={
         }
         def.resolve();
         return def.promise;
+    },
+    addEmail:function(req){
+        var def=q.defer();
+        try{
+            console.log(req.query);
+            // var input=
+            // connection.connect();
+            // connection.query("update "+input.table+" set "+input.field+"=1 where email="+input.email+" and campaign_id="+input.campaign_id,function(err,results,fields){
+            //
+            // })
+        }catch(e){
+            console.log(e);
+        }
+        def.resolve();
+        return def.promise;
     }
 };
 module.exports=runs;

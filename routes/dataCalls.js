@@ -25,7 +25,16 @@ router.get('/:pixel_name',
                 res.status(err.status).json(err.message);
             });
     });
-
+router.get('/email',
+    function(req,res){
+        dataLogic.addEmail(req)
+            .then(function(ok){
+                res.json(config.get('ok'));
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
 
 module.exports = router;
 
