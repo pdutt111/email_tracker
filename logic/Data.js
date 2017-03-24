@@ -31,8 +31,9 @@ var runs={
              console.log(JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg",""))));
             var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
             connection.connect();
-            connection.query("update "+input.table+" set "+input.field+"=1 where email="+input.email+" and campaign_id="+input.campaign_id,function(err,results,fields){
-
+            connection.query("update table email_campaigns set status=1 where " +
+                "email="+input.email+"and campaign_id="+input.campaign_id,function(err,results,fields){
+                connection.close();
             })
         }catch(e){
             console.log(e);
@@ -43,7 +44,8 @@ var runs={
     addEmail:function(req){
         var def=q.defer();
         try{
-            console.log(req.query);
+            console.log(req.file);
+            events.emitter.emit('process_csv',req.file.filename);
             // var input=
             // connection.connect();
             // connection.query("update "+input.table+" set "+input.field+"=1 where email="+input.email+" and campaign_id="+input.campaign_id,function(err,results,fields){

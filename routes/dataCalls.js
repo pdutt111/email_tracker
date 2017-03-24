@@ -13,6 +13,9 @@ var log = require('tracer').colorConsole(config.get('log'));
 var apn=require('../notificationSenders/apnsender');
 var gcm=require('../notificationSenders/gcmsender');
 var dataLogic=require('../logic/Data');
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/campaigns' })
+
 
 
 router.get('/:pixel_name',
@@ -25,7 +28,7 @@ router.get('/:pixel_name',
                 res.status(err.status).json(err.message);
             });
     });
-router.get('/email',
+router.post('/campaign_complete',upload.single("csv"),
     function(req,res){
         dataLogic.addEmail(req)
             .then(function(ok){
