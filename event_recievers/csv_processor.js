@@ -8,9 +8,8 @@ var request=require('request');
 var mysql =require("mysql");
 var LineByLineReader = require('line-by-line');
 var connection = mysql.createConnection(config.get('mysql'));
-
+connection.connect();
 events.emitter.on('process_csv',function(data) {
-   connection.connect();
     lr = new LineByLineReader(config.get("upload_path")+data);
     lr.on('error', function (err) {
         // 'err' contains error object

@@ -17,7 +17,7 @@ var base64 = require('base-64');
 var bcrypt = require('bcrypt');
 var mysql =require("mysql");
 var connection = mysql.createConnection(config.get("mysql"));
-
+connection.connect();
 
 var runs={
     updateTracker:function(req){
@@ -25,7 +25,6 @@ var runs={
         try{
              console.log(JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg",""))));
             var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
-            connection.connect();
             var sql="update table email_campaigns set status=1 where " +
                 "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
             log.debug(sql)
