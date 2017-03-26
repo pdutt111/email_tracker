@@ -21,6 +21,7 @@ events.emitter.on('process_csv',function(data) {
             var email=line.split(",")[0];
             var campaign_id=line.split(",")[1];
             var send_time=new Date(line.split(",")[2]);
+            log.debug(email,campaign_id,send_time);
             var sql='insert into email_campaigns(email,campaign_id,send_time)' +
                 ' values('+connection.escape(email.replace(/"/g,""))+','+connection.escape(campaign_id.replace(/"/g,""))+
                 ","+connection.escape(send_time)+')'
