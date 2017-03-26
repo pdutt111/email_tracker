@@ -25,7 +25,7 @@ var runs={
         try{
              console.log(JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg",""))));
             var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
-            var sql="update table email_campaigns set status=1 where " +
+            var sql="update email_campaigns set status=1 where " +
                 "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
             log.debug(sql)
             connection.query(sql,function(err,results,fields){
