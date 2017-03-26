@@ -21,7 +21,7 @@ events.emitter.on('process_csv',function(data) {
         var email=line.split(",")[0];
         var campaign_id=line.split(",")[1];
         connection.query('insert into email_campaigns(email,campaign_id)' +
-            ' values('+connection.escape(email)+','+connection.escape(campaign_id)+')'
+            ' values('+connection.escape(email.replace(/"/g,""))+','+connection.escape(campaign_id.replace(/"/g,""))+')'
             ,function(err,results,info){
                 if(err){
                     log.warn(err)
