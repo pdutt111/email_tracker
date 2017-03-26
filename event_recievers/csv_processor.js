@@ -17,15 +17,20 @@ events.emitter.on('process_csv',function(data) {
 
     lr.on('line', function (line) {
         // 'line' contains the current line without the trailing newline character.
-        var email=line.split(",")[0];
-        var campaign_id=line.split(",")[1];
-        connection.query('insert into email_campaigns(email,campaign_id)' +
-            ' values('+connection.escape(email.replace(/"/g,""))+','+connection.escape(campaign_id.replace(/"/g,""))+')'
-            ,function(err,results,info){
-                if(err){
-                    log.warn(err)
-                }
-            });
+        try{
+            var email=line.split(",")[0];
+            var campaign_id=line.split(",")[1];
+            var send_time=new Date(line.split(",")[2]);
+            var sql='insert into email_campaigns(email,campaign_id,send_time)' +
+                ' values('+connection.escape(email.replace(/"/g,""))+','+connection.escape(campaign_id.replace(/"/g,""))+
+                ","+connection.escape(send_time)+')'
+            connection.query(sql
+                ,function(err,results,info){
+                    if(err){
+                        log.warn(err)
+                    }
+                });
+        }catch(e){}
     });
 
     lr.on('end', function () {
