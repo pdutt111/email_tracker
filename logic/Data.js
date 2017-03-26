@@ -26,8 +26,10 @@ var runs={
              console.log(JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg",""))));
             var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
             connection.connect();
-            connection.query("update table email_campaigns set status=1 where " +
-                "email="+input.email+"and campaign_id="+input.campaign_id,function(err,results,fields){
+            var sql="update table email_campaigns set status=1 where " +
+                "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
+            log.debug(sql)
+            connection.query(sql,function(err,results,fields){
                 // connection.end();
             })
         }catch(e){
