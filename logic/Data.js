@@ -16,13 +16,8 @@ var crypto=require('../authentication/crypto');
 var base64 = require('base-64');
 var bcrypt = require('bcrypt');
 var mysql =require("mysql");
+var connection = mysql.createConnection(config.get("mysql"));
 
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'wunderbrow'
-});
 
 var runs={
     updateTracker:function(req){
@@ -33,7 +28,7 @@ var runs={
             connection.connect();
             connection.query("update table email_campaigns set status=1 where " +
                 "email="+input.email+"and campaign_id="+input.campaign_id,function(err,results,fields){
-                connection.close();
+                // connection.end();
             })
         }catch(e){
             console.log(e);
@@ -44,7 +39,6 @@ var runs={
     addEmail:function(req){
         var def=q.defer();
         try{
-            console.log(req.file);
             events.emitter.emit('process_csv',req.file.filename);
             // var input=
             // connection.connect();

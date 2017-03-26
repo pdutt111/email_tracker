@@ -7,13 +7,7 @@ var log = require('tracer').colorConsole(config.get('log'));
 var request=require('request');
 var mysql =require("mysql");
 var LineByLineReader = require('line-by-line');
-
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'wunderbrow'
-});
+var connection = mysql.createConnection(config.get('mysql'));
 
 events.emitter.on('process_csv',function(data) {
    connection.connect();
@@ -25,9 +19,9 @@ events.emitter.on('process_csv',function(data) {
     lr.on('line', function (line) {
         // 'line' contains the current line without the trailing newline character.
         var email=line.split(",")[0];
-        var campaign_id=line.split(",")[0];
+        var campaign_id=line.split(",")[1];
         connection.query('insert into email_campaigns(email,campaign_id)' +
-            ' values("'+connection.escape(email)+'","'+connection.escape(campaign_id)+'")'
+            ' values('+connection.escape(email)+','+connection.escape(campaign_id)+')'
             ,function(err,results,info){
                 if(err){
                     log.warn(err)
@@ -37,7 +31,7 @@ events.emitter.on('process_csv',function(data) {
 
     lr.on('end', function () {
         // All lines are read, file is closed now.
-        connection.end();
+        // connection.end();
     });
 
 });

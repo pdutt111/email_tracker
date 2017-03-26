@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var log = require('tracer').colorConsole(config.get('log'));
 var dataCalls = require('./routes/dataCalls');
 require('./event_recievers/smsSender');
+require('./event_recievers/csv_processor');
 var app = express();
 
 // view engine setup
