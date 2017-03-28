@@ -28,7 +28,7 @@ router.get('/:pixel_name',
                 res.status(err.status).json(err.message);
             });
     });
-router.get('/campaign',
+router.get('/redirect',
     function(req,res){
         dataLogic.updateClicks(req)
             .then(function(ok){
