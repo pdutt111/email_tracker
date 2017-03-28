@@ -28,6 +28,16 @@ router.get('/:pixel_name',
                 res.status(err.status).json(err.message);
             });
     });
+router.get('/campaign',
+    function(req,res){
+        dataLogic.updateClicks(req)
+            .then(function(ok){
+                res.redirect(req.query.url);
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
 router.post('/campaign_complete',upload.single("csv"),
     function(req,res){
         dataLogic.addEmail(req)

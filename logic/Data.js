@@ -51,6 +51,21 @@ var runs={
         }
         def.resolve();
         return def.promise;
+    },
+    updateClicks:function(req){
+        var def=q.defer();
+        try{
+            var sql="update email_campaigns set clicks= clicks + 1,click_time="+connection.escape(new Date())+" where " +
+                "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
+            log.debug(sql)
+            connection.query(sql,function(err,results,fields){
+                // connection.end();
+            })
+        }catch(e){
+            console.log(e);
+        }
+        def.resolve();
+        return def.promise;
     }
 };
 module.exports=runs;
