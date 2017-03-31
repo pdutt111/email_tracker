@@ -38,6 +38,18 @@ router.get('/redirect',
                 res.status(err.status).json(err.message);
             });
     });
+
+router.post('/unsubscribe',
+    function(req,res){
+        dataLogic.unsubscribe(req)
+            .then(function(ok){
+                res.json(config.get('ok'));
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
+
 router.post('/campaign_complete',upload.single("csv"),
     function(req,res){
         dataLogic.addEmail(req)
