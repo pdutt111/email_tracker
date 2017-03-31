@@ -13,7 +13,8 @@ var log = require('tracer').colorConsole(config.get('log'));
 var apn=require('../notificationSenders/apnsender');
 var gcm=require('../notificationSenders/gcmsender');
 var dataLogic=require('../logic/Data');
-var multer  = require('multer')
+var multer  = require('multer');
+var base64 = require('base-64');
 var upload = multer({ dest: 'uploads/campaigns' })
 
 
@@ -32,10 +33,11 @@ router.get('/redirect',
     function(req,res){
         dataLogic.updateClicks(req)
             .then(function(ok){
-                res.redirect(req.query.url);
+                res.redirect(base64.decode(req.query.url));
             })
             .catch(function(err){
-                res.status(err.status).json(err.message);
+                res.redirect(base64.decode(req.query.url));
+                // res.status(err.status).json(err.message);
             });
     });
 
