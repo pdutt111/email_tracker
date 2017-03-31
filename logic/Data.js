@@ -23,16 +23,15 @@ var runs={
     updateTracker:function(req){
         var def=q.defer();
         try{
-             console.log(JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg",""))));
+            log.info(req.params);
             var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
             var sql="update email_campaigns set status=1,open_time="+connection.escape(new Date())+" where " +
                 "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
-            log.debug(sql)
             connection.query(sql,function(err,results,fields){
                 // connection.end();
             })
         }catch(e){
-            console.log(e);
+            log.info(e);
         }
         def.resolve();
         return def.promise;
@@ -54,17 +53,17 @@ var runs={
     },
     updateClicks:function(req){
         var def=q.defer();
-        try{
-            var sql="update email_campaigns set clicks= clicks + 1,click_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
-            log.debug(sql)
-            connection.query(sql,function(err,results,fields){
-                // connection.end();
-            })
-        }catch(e){
-            console.log(e);
-        }
-        def.resolve();
+        // try{
+            log.info(req.params);
+        //     var sql="update email_campaigns set clicks= clicks + 1,click_time="+connection.escape(new Date())+" where " +
+        //         "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
+        //     connection.query(sql,function(err,results,fields){
+        //         // connection.end();
+                def.resolve();
+        //     })
+        // }catch(e){
+        //     console.log(e);
+        // }
         return def.promise;
     },
     unsubscribe:function (req) {
@@ -75,6 +74,11 @@ var runs={
             log.debug(sql)
             connection.query(sql,function(err,results,fields){
                 // connection.end();
+                if(!err){
+                    def.resolve();
+                }else{
+                    def.reject(config.get('error.dberror'));
+                }
             })
         }catch(e){
             console.log(e);

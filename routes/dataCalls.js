@@ -19,29 +19,21 @@ var upload = multer({ dest: 'uploads/campaigns' })
 
 
 
-router.get('/:pixel_name',
-    function(req,res){
-        dataLogic.updateTracker(req)
-            .then(function(ok){
-                res.sendfile('public/pixel.jpg');
-            })
-            .catch(function(err){
-                res.status(err.status).json(err.message);
-            });
-    });
-router.get('/redirect',
-    function(req,res){
-        dataLogic.updateClicks(req)
-            .then(function(ok){
-                res.redirect(base64.decode(req.query.url));
-            })
-            .catch(function(err){
-                res.redirect(base64.decode(req.query.url));
-                // res.status(err.status).json(err.message);
-            });
-    });
 
-router.post('/unsubscribe',
+// router.get('/redirect/:url',
+//     function(req,res){
+//         dataLogic.updateClicks(req)
+//             .then(function(ok){
+//                 log.info(ok);
+//                 res.redirect(base64.decode(req.params.url.replace(".jpg","")));
+//             })
+//             .catch(function(err){
+//                 log.info(err);
+//                 res.status(err.status).json(err.message);
+//             });
+//     });
+
+router.get('/unsubscribe',
     function(req,res){
         dataLogic.unsubscribe(req)
             .then(function(ok){
@@ -57,6 +49,16 @@ router.post('/campaign_complete',upload.single("csv"),
         dataLogic.addEmail(req)
             .then(function(ok){
                 res.json(config.get('ok'));
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
+router.get('/:pixel_name',
+    function(req,res){
+        dataLogic.updateTracker(req)
+            .then(function(ok){
+                res.sendfile('public/pixel.jpg');
             })
             .catch(function(err){
                 res.status(err.status).json(err.message);
