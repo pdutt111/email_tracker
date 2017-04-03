@@ -43,8 +43,9 @@ router.get('/unsubscribe',
                 res.status(err.status).json(err.message);
             });
     });
-router.get('/bounce',
+router.post('/bounce',
     function(req,res){
+    console.log(req.body);
         dataLogic.bounce(req)
             .then(function(ok){
                 res.json(config.get('ok'));
