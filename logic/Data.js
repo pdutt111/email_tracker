@@ -85,23 +85,24 @@ var runs={
         }
         return def.promise;
     },
-    bounce:function (req) {
+    sns:function (req) {
         var def=q.defer();
-        try{
-            var sql="update email_campaigns set bounce='true',bounce_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
-            log.debug(sql)
-            connection.query(sql,function(err,results,fields){
-                // connection.end();
-                if(!err){
-                    def.resolve();
-                }else{
-                    def.reject({status:500,message:config.get('error.dberror')});
-                }
-            })
-        }catch(e){
-            console.log(e);
-        }
+        // try{
+        //     var sql="update email_campaigns set bounce='true',bounce_time="+connection.escape(new Date())+" where " +
+        //         "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
+        //     log.debug(sql)
+        //     connection.query(sql,function(err,results,fields){
+        //         // connection.end();
+        //         if(!err){
+        //             def.resolve();
+        //         }else{
+        //             def.reject({status:500,message:config.get('error.dberror')});
+        //         }
+        //     })
+        // }catch(e){
+        //     console.log(e);
+        // }
+        def.resolve();
         return def.promise;
     }
 };

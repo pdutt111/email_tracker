@@ -42,16 +42,20 @@ router.get('/unsubscribe',
                 res.status(err.status).json(err.message);
             });
     });
-router.post('/bounce',
+router.post('/sns',
     function(req,res){
-    console.log(req.body,JSON.parse(req.text),req.headers);
-        dataLogic.bounce(req)
+    try{
+        req.body=JSON.parse(req.text);
+        dataLogic.sns(req)
             .then(function(ok){
                 res.json(config.get('ok'));
             })
             .catch(function(err){
                 res.status(err.status).json(err.message);
             });
+    }catch(e){
+        res.status(400).json(config.get("error.badrequest"));
+    }
     });
 
 router.post('/campaign_complete',upload.single("csv"),
