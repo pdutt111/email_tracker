@@ -69,7 +69,7 @@ var runs={
     unsubscribe:function (req) {
         var def=q.defer();
         try{
-            var sql="update users set unsub='true',unsub_time="+connection.escape(new Date())+" where " +
+            var sql="update users set unsub='true',unsub_campaign="+connection.escape(req.query.campaign_id)+",unsub_time="+connection.escape(new Date())+" where " +
                 "email="+connection.escape(req.query.email)
             log.debug(sql)
             connection.query(sql,function(err,results,fields){
