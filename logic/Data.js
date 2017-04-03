@@ -77,7 +77,7 @@ var runs={
                 if(!err){
                     def.resolve();
                 }else{
-                    def.reject(config.get('error.dberror'));
+                    def.reject({status:500,message:config.get('error.dberror')});
                 }
             })
         }catch(e){
@@ -96,7 +96,7 @@ var runs={
                 if(!err){
                     def.resolve();
                 }else{
-                    def.reject(config.get('error.dberror'));
+                    def.reject({status:500,message:config.get('error.dberror')});
                 }
             })
         }catch(e){
