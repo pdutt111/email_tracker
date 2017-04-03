@@ -46,7 +46,6 @@ router.post('/sns',
     function(req,res){
     try{
         req.body=JSON.parse(req.text);
-        log.info(req.body);
         dataLogic.sns(req)
             .then(function(ok){
                 res.json(config.get('ok'));
