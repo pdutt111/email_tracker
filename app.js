@@ -11,6 +11,7 @@ var log = require('tracer').colorConsole(config.get('log'));
 var dataCalls = require('./routes/dataCalls');
 require('./event_recievers/smsSender');
 require('./event_recievers/csv_processor');
+var xmlparser = require('express-xml-bodyparser');
 var app = express();
 
 // view engine setup
@@ -25,7 +26,7 @@ app.use(bodyParser.raw({ limit:'10mb'}));
 app.use(bodyParser.urlencoded({ extended: false, limit:'10mb'}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(xmlparser());
 /**
  * middleware to authenticate the jwt and routes
  */

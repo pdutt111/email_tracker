@@ -19,7 +19,6 @@ var upload = multer({ dest: 'uploads/campaigns' })
 
 
 
-
 // router.get('/redirect/:url',
 //     function(req,res){
 //         dataLogic.updateClicks(req)
