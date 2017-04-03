@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="icon" type="image/png" sizes="16x16" href="#">        
+		<title>Unsubscribe</title>
+		<link href="/unsub/OpenSans-Regular.ttf" rel="stylesheet" type="text/css">
+		<link href="/unsub/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="/unsub/style.css" rel="stylesheet" type="text/css">
+		<link href="/unsub/style1.css" rel="stylesheet" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+            jQuery.fn.serializeObject = function() {
+                var arrayData, objectData;
+                arrayData = this.serializeArray();
+                objectData = {};
+
+                $.each(arrayData, function() {
+                    var value;
+
+                    if (this.value != null) {
+                        value = this.value;
+                    } else {
+                        value = '';
+                    }
+
+                    if (objectData[this.name] != null) {
+                        if (!objectData[this.name].push) {
+                            objectData[this.name] = [objectData[this.name]];
+                        }
+
+                        objectData[this.name].push(value);
+                    } else {
+                        objectData[this.name] = value;
+                    }
+                });
+
+                return objectData;
+            };
+
+            function callServer(){
+                console.log("calling server")
+                var data=$("#unsub_form").serializeObject();
+                data.email="<%= email %>";
+                console.log(data);
+                $.post('/api/v1/data/unsubreason',data,
+                    function(returnedData){
+
+                        $("#top_block").hide();
+                        $("#lower_block").css(visibility,block);
+                    }).fail(function(){
+                        $("#top_block").hide();
+                        $("#lower_block").css(visibility,block);
+                });
+            }
+        </script>
+	</head>
+    <body>
+        
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12"><span style="color:#333;width:100%;text-align: center;"><h2>We're sorry that you're thinking of unsubscribing</h2>
+                        <br>
+                        <h5>It is our earnest effort to serve you content that is most relevant and according to your area of interest.</h5> 
+
+                        </span>
+                </div>
+            </div>
+            <div class="row" id="top_block">
+                <div class="col-lg-4 col-md-4 col-xs-4"></div>
+                <div class="col-lg-4 col-md-4 col-xs-4 unsubcribe">
+                    
+                    <h3 style="color:#017cba;width:100%;text-align: center;font-size: 23px;">Still want to unsubscribe?</h3>
+                    <h4 style="color:#444;width:100%;text-align: center;">If you have a moment, please let us know why you unsubscribed</h4>
+                    <br><br>
+                    <form id="unsub_form" action="#" onsubmit="return false;">
+                        <div class="form-group"><input type="radio" id="opt" name="option" value="You're sending too many emails">You're sending too many emails</div>
+                        <div class="form-group"><input type="radio" id="opt" name="option" value="I no longer want to receive these emails">I no longer want to receive these emails</div>
+                        <div class="form-group"><input type="radio" id="opt" name="option" value="Your emails are not relevant to me">Your emails are not relevant to me</div>
+                        <div class="form-group"><input type="radio" class="enabled_radio" id="opt" name="option" value="other">Others
+                            <input type="text" name="other_reason" id="other" class="others-txt enabled" placeholder="">
+                        </div>
+                        <div class="form-group"><button type="submit" class="btn btn-default unsubscribe-btn" onclick="callServer();">Unsubscribe</button></div>
+                    </form>
+
+                </div>
+                
+            </div>
+			<div class="row" id="lower_block" style="visibility: none">
+			<div class="col-lg-4 col-md-4 col-xs-4"></div>
+			<div class="col-lg-4 col-md-4 col-xs-4 unsubcribe">
+				OK, you've unsubscribed, it may take a day or two, but pretty soon you should stop getting most emails from 2Wunder2.<br>We'll still send you occasional important emails related to your shopping on 2Wunder2.<br>
+				<td width="300" align="right"><a href="http://www.wunderbrow.co.uk/w/tour/" style="color:#df882a; text-decoration:underline;">Return to our website</a></td>
+			</div>
+            </div>
+
+    </body>
+</html>

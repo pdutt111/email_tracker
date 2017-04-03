@@ -36,6 +36,16 @@ router.get('/unsubscribe',
     function(req,res){
         dataLogic.unsubscribe(req)
             .then(function(ok){
+                res.render('unsub.ejs',{email:req.query.email});
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
+router.post('/unsubreason',
+    function(req,res){
+        dataLogic.unsubreason(req)
+            .then(function(ok){
                 res.json(config.get('ok'));
             })
             .catch(function(err){

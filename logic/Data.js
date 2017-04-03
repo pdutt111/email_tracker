@@ -85,6 +85,29 @@ var runs={
         }
         return def.promise;
     },
+    unsubreason:function (req) {
+        var def=q.defer();
+        try{
+            var reason=req.body.option
+            if(req.body.option=="other"){
+                var reason=req.body.other_reason
+            }
+            var sql="update users set unsub_reason="+connection.escape(reason)+" where " +
+                "email="+connection.escape(req.body.email)
+            log.debug(sql)
+            connection.query(sql,function(err,results,fields){
+                // connection.end();
+                if(!err){
+                    def.resolve();
+                }else{
+                    def.reject({status:500,message:config.get('error.dberror')});
+                }
+            })
+        }catch(e){
+            console.log(e);
+        }
+        return def.promise;
+    },
     resubscribe:function (req) {
         var def=q.defer();
         try{
