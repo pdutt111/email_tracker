@@ -26,7 +26,7 @@ app.use(bodyParser.json({ limit:'10mb'}));
 app.use(bodyParser.raw({ limit:'10mb'}));
 app.use(bodyParser.urlencoded({ extended: false, limit:'10mb'}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public',express.static(path.join(__dirname, 'public')));
 // app.use(xmlparser());
 /**
  * middleware to authenticate the jwt and routes
