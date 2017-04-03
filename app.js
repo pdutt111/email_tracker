@@ -30,6 +30,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 /**
  * middleware to authenticate the jwt and routes
  */
+app.use(function(req, res, next){
+    if (req.is('text/*')) {
+        req.text = '';
+        req.setEncoding('utf8');
+        req.on('data', function(chunk){ req.text += chunk });
+        req.on('end', next);
+    } else {
+        next();
+    }
+});
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
