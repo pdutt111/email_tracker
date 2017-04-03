@@ -44,7 +44,7 @@ router.get('/unsubscribe',
     });
 router.post('/bounce',
     function(req,res){
-    console.log(req.body,req.text,req.headers);
+    console.log(req.body,JSON.parse(req.text),req.headers);
         dataLogic.bounce(req)
             .then(function(ok){
                 res.json(config.get('ok'));
