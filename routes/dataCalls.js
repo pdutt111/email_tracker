@@ -43,6 +43,16 @@ router.get('/unsubscribe',
                 res.status(err.status).json(err.message);
             });
     });
+router.get('/bounce',
+    function(req,res){
+        dataLogic.bounce(req)
+            .then(function(ok){
+                res.json(config.get('ok'));
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
 
 router.post('/campaign_complete',upload.single("csv"),
     function(req,res){
