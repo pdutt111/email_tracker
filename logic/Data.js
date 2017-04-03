@@ -76,7 +76,7 @@ var runs={
             connection.query(sql,function(err,results,fields){
                 // connection.end();
                 if(!err){
-                    def.resolve();
+                    def.resolve(data.email);
                 }else{
                     def.reject({status:500,message:config.get('error.dberror')});
                 }

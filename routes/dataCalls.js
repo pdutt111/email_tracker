@@ -35,8 +35,8 @@ var upload = multer({ dest: 'uploads/campaigns' })
 router.get('/unsubscribe',
     function(req,res){
         dataLogic.unsubscribe(req)
-            .then(function(ok){
-                res.render('unsub.ejs',{email:req.query.email});
+            .then(function(email){
+                res.render('unsub.ejs',{email:email});
             })
             .catch(function(err){
                 res.status(err.status).json(err.message);
