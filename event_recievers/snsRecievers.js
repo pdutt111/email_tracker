@@ -20,7 +20,7 @@ events.emitter.on('bounce',function(data){
 });
 events.emitter.on('complaint',function(data){
     try{
-        var sql="update email_campaigns set complaint='true',complaintc_time="+connection.escape(new Date())+" where " +
+        var sql="update email_campaigns set complaint='true',complaint_time="+connection.escape(new Date())+" where " +
             "email="+connection.escape(data.destination[0])+
             log.debug(sql)
         connection.query(sql,function(err,results,fields){
