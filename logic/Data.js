@@ -69,8 +69,9 @@ var runs={
     unsubscribe:function (req) {
         var def=q.defer();
         try{
-            var sql="update users set unsub='true',unsub_campaign="+connection.escape(req.query.campaign_id)+",unsub_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(req.query.email)
+            var data=JSON.parse(base64.decode(req.query.data))
+            var sql="update users set unsub='true',unsub_campaign="+connection.escape(data.campaign_id)+",unsub_time="+connection.escape(new Date())+" where " +
+                "email="+connection.escape(data.email)
             log.debug(sql)
             connection.query(sql,function(err,results,fields){
                 // connection.end();
