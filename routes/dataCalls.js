@@ -42,6 +42,16 @@ router.get('/unsubscribe',
                 res.status(err.status).json(err.message);
             });
     });
+router.get('/resubscribe',
+    function(req,res){
+        dataLogic.resubscribe(req)
+            .then(function(ok){
+                res.json(config.get('ok'));
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
 router.post('/sns',
     function(req,res){
     try{

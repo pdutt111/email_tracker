@@ -69,8 +69,27 @@ var runs={
     unsubscribe:function (req) {
         var def=q.defer();
         try{
-            var sql="update email_campaigns set unsub='true',unsub_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
+            var sql="update users set unsub='true',unsub_time="+connection.escape(new Date())+" where " +
+                "email="+connection.escape(req.query.email)
+            log.debug(sql)
+            connection.query(sql,function(err,results,fields){
+                // connection.end();
+                if(!err){
+                    def.resolve();
+                }else{
+                    def.reject({status:500,message:config.get('error.dberror')});
+                }
+            })
+        }catch(e){
+            console.log(e);
+        }
+        return def.promise;
+    },
+    resubscribe:function (req) {
+        var def=q.defer();
+        try{
+            var sql="update users set unsub='false',resub_time="+connection.escape(new Date())+" where " +
+                "email="+connection.escape(req.query.email)
             log.debug(sql)
             connection.query(sql,function(err,results,fields){
                 // connection.end();

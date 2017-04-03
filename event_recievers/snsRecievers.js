@@ -10,7 +10,7 @@ connection.connect();
 events.emitter.on('bounce',function(data){
     log.info(data);
     try{
-        var sql="update email_campaigns set bounce='true',bounce_time="+connection.escape(new Date())+" where " +
+        var sql="update users set bounce='true',bounce_time="+connection.escape(new Date())+" where " +
             "email="+connection.escape(data.destination[0])
         log.debug(sql)
         connection.query(sql,function(err,results,fields){
@@ -22,7 +22,7 @@ events.emitter.on('bounce',function(data){
 events.emitter.on('complaint',function(data){
     log.info(data);
     try{
-        var sql="update email_campaigns set complaint='true',complaint_time="+connection.escape(new Date())+" where " +
+        var sql="update users set complaint='true',complaint_time="+connection.escape(new Date())+" where " +
             "email="+connection.escape(data.destination[0])
             log.debug(sql)
         connection.query(sql,function(err,results,fields){

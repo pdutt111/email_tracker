@@ -31,6 +31,14 @@ events.emitter.on('process_csv',function(data) {
                         log.warn(err)
                     }
                 });
+            var sql='insert into users(email)' +
+                ' values('+connection.escape(email.replace(/"/g,""))+')'
+            connection.query(sql
+                ,function(err,results,info){
+                    if(err){
+                        log.warn(err)
+                    }
+                });
         }catch(e){}
     });
 
