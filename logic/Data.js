@@ -88,7 +88,7 @@ var runs={
     sns:function (req) {
         var def=q.defer();
         try{
-            var message=JSON.parse(req.body.message);
+            var message=JSON.parse(req.body.Message);
             if(message.notificationType=="Bounce"){
                 log.info(message.mail);
                 events.emitter.emit("bounce",message.mail);
