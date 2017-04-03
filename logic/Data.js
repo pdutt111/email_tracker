@@ -89,11 +89,13 @@ var runs={
         var def=q.defer();
         try{
             var message=JSON.parse(req.body.message);
-            if(message.notificationType=="bounce"){
+            if(message.notificationType=="Bounce"){
                 log.info(message.mail);
                 events.emitter.emit("bounce",message.mail);
             }
-        }catch(e){}
+        }catch(e){
+            log.info(e);
+        }
         // try{
         //     var sql="update email_campaigns set bounce='true',bounce_time="+connection.escape(new Date())+" where " +
         //         "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
