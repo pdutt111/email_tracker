@@ -90,27 +90,13 @@ var runs={
         try{
             var message=JSON.parse(req.body.Message);
             if(message.notificationType=="Bounce"){
-                log.info(message.mail);
                 events.emitter.emit("bounce",message.mail);
+            }else if(message.notificationType=="Complaint"){
+                events.emitter.emit("complaint",message.mail);
             }
         }catch(e){
             log.info(e);
         }
-        // try{
-        //     var sql="update email_campaigns set bounce='true',bounce_time="+connection.escape(new Date())+" where " +
-        //         "email="+connection.escape(req.query.email)+"and campaign_id="+connection.escape(req.query.campaign_id);
-        //     log.debug(sql)
-        //     connection.query(sql,function(err,results,fields){
-        //         // connection.end();
-        //         if(!err){
-        //             def.resolve();
-        //         }else{
-        //             def.reject({status:500,message:config.get('error.dberror')});
-        //         }
-        //     })
-        // }catch(e){
-        //     console.log(e);
-        // }
         def.resolve();
         return def.promise;
     }
