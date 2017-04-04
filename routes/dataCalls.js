@@ -55,8 +55,8 @@ router.post('/unsubreason',
 router.get('/resubscribe',
     function(req,res){
         dataLogic.resubscribe(req)
-            .then(function(ok){
-                res.json(config.get('ok'));
+            .then(function(email){
+                res.render('resub.ejs',{email:email});
             })
             .catch(function(err){
                 res.status(err.status).json(err.message);
