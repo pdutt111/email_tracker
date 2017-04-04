@@ -82,7 +82,8 @@ var runs={
                 }
             })
         }catch(e){
-            console.log(e);
+            log.info(e);
+            def.reject({status:500,message:config.get('error.dberror')});
         }
         return def.promise;
     },
@@ -105,7 +106,8 @@ var runs={
                 }
             })
         }catch(e){
-            console.log(e);
+            log.info(e);
+            def.reject({status:500,message:config.get('error.dberror')});
         }
         return def.promise;
     },
@@ -124,7 +126,8 @@ var runs={
                 }
             })
         }catch(e){
-            console.log(e);
+            log.info(e);
+            def.reject({status:500,message:config.get('error.dberror')});
         }
         return def.promise;
     },
