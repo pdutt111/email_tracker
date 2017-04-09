@@ -54,6 +54,7 @@ var runs={
     insertEmail:function(req){
         var def=q.defer();
         try{
+            console.log(req.body);
             var sql='insert into email_campaigns(email,campaign_id,send_time)' +
                 ' values('+connection.escape(req.body.email.replace(/"/g,""))+','+connection.escape(req.body.campaign_id.replace(/"/g,""))+
                 ","+connection.escape(new Date())+')'
