@@ -63,7 +63,7 @@ var runs={
             })
             var sql2='insert into users(email)' +
                 ' values('+connection.escape(req.body.email.replace(/"/g,""))+')'
-            connection.query(sql2s,function(err,results,fields){
+            connection.query(sql2,function(err,results,fields){
                 // connection.end();
             })
         }catch(e){
