@@ -77,7 +77,16 @@ router.post('/sns',
         res.status(400).json(config.get("error.badrequest"));
     }
     });
-
+router.post('/email',
+    function(req,res){
+        dataLogic.insertEmail(req)
+            .then(function(ok){
+                res.json(config.get('ok'));
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
 router.post('/campaign_complete',upload.single("csv"),
     function(req,res){
         dataLogic.addEmail(req)

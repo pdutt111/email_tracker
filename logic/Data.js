@@ -51,6 +51,26 @@ var runs={
         def.resolve();
         return def.promise;
     },
+    insertEmail:function(req){
+        var def=q.defer();
+        try{
+            var sql='insert into email_campaigns(email,campaign_id,send_time)' +
+                ' values('+connection.escape(req.body.email.replace(/"/g,""))+','+connection.escape(req.body.campaign_id.replace(/"/g,""))+
+                ","+connection.escape(req.body.send_time)+')'
+            connection.query(sql,function(err,results,fields){
+                // connection.end();
+            })
+            var sql2='insert into users(email)' +
+                ' values('+connection.escape(req.body.email.replace(/"/g,""))+')'
+            connection.query(sql2,function(err,results,fields){
+                // connection.end();
+            })
+        }catch(e){
+            console.log(e);
+        }
+        def.resolve();
+        return def.promise;
+    },
     updateClicks:function(req){
         var def=q.defer();
         // try{
