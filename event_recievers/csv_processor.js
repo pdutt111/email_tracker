@@ -7,8 +7,7 @@ var log = require('tracer').colorConsole(config.get('log'));
 var request=require('request');
 var mysql =require("mysql");
 var LineByLineReader = require('line-by-line');
-var connection = mysql.createConnection(config.get('mysql'));
-connection.connect();
+var pool = mysql.createPool(config.get('mysql'));
 events.emitter.on('process_csv',function(data) {
     lr = new LineByLineReader(config.get("upload_path")+data);
     lr.on('error', function (err) {
@@ -22,23 +21,31 @@ events.emitter.on('process_csv',function(data) {
             var campaign_id=line.split(",")[1];
             var send_time=new Date(line.split(",")[2].replace(/"/g,""));
             // log.debug(email,campaign_id,send_time);
-            var sql='insert into email_campaigns(email,campaign_id,send_time)' +
-                ' values('+connection.escape(email.replace(/"/g,""))+','+connection.escape(campaign_id.replace(/"/g,""))+
-                ","+connection.escape(send_time)+')'
-            connection.query(sql
-                ,function(err,results,info){
-                    if(err){
-                        log.warn(err)
-                    }
-                });
-            var sql='insert into users(email)' +
-                ' values('+connection.escape(email.replace(/"/g,""))+')'
-            connection.query(sql
-                ,function(err,results,info){
-                    if(err){
-                        log.warn(err)
-                    }
-                });
+            pool.getConnection(function(err, connection) {
+                if (err) {
+                    def.reject();
+                } else {
+                    var sql = 'insert into email_campaigns(email,campaign_id,send_time)' +
+                        ' values(' + connection.escape(email.replace(/"/g, "")) + ',' + connection.escape(campaign_id.replace(/"/g, "")) +
+                        "," + connection.escape(send_time) + ')'
+                    connection.query(sql
+                        , function (err, results, info) {
+                            connection.release();
+                            if (err) {
+                                log.warn(err)
+                            }
+                        });
+                    var sql = 'insert into users(email)' +
+                        ' values(' + connection.escape(email.replace(/"/g, "")) + ')'
+                    connection.query(sql
+                        , function (err, results, info) {
+                            connection.release();
+                            if (err) {
+                                log.warn(err)
+                            }
+                        });
+                }
+            });
         }catch(e){}
     });
 

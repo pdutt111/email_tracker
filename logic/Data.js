@@ -16,19 +16,25 @@ var crypto=require('../authentication/crypto');
 var base64 = require('base-64');
 var bcrypt = require('bcrypt');
 var mysql =require("mysql");
-var connection = mysql.createConnection(config.get("mysql"));
-connection.connect();
+var pool = mysql.createPool(config.get("mysql"));
 
 var runs={
     updateTracker:function(req){
         var def=q.defer();
         try{
             log.info(req.params);
-            var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
-            var sql="update email_campaigns set status=1,open_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
-            connection.query(sql,function(err,results,fields){
-                // connection.end();
+            pool.getConnection(function(err, connection) {
+                if(err){
+                    def.reject();
+                }else{
+                    var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
+                    var sql="update email_campaigns set status=1,open_time="+connection.escape(new Date())+" where " +
+                        "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
+                    connection.query(sql,function(err,results,fields){
+                        // connection.end();
+                        connection.release();
+                    })
+                }
             })
         }catch(e){
             log.info(e);
@@ -55,20 +61,29 @@ var runs={
         var def=q.defer();
         try{
             console.log(req.body);
-            var sql='insert into email_campaigns(email,campaign_id,send_time)' +
-                ' values('+connection.escape(req.body.email.replace(/"/g,""))+','+connection.escape(req.body.campaign_id.replace(/"/g,""))+
-                ","+connection.escape(new Date())+')'
-            connection.query(sql,function(err,results,fields){
-                // connection.end();
-            })
-            var sql2='insert into users(email)' +
-                ' values('+connection.escape(req.body.email.replace(/"/g,""))+')'
-            connection.query(sql2,function(err,results,fields){
-                // connection.end();
-            })
+            pool.getConnection(function(err, connection) {
+                    if(err){
+                        def.reject();
+                    }else {
+                        var sql = 'insert into email_campaigns(email,campaign_id,send_time)' +
+                            ' values(' + connection.escape(req.body.email.replace(/"/g, "")) + ',' + connection.escape(req.body.campaign_id.replace(/"/g, "")) +
+                            "," + connection.escape(new Date()) + ')'
+                        connection.query(sql, function (err, results, fields) {
+                            // connection.end();
+                            connection.release();
+                        })
+                        var sql2 = 'insert into users(email)' +
+                            ' values(' + connection.escape(req.body.email.replace(/"/g, "")) + ')'
+                        connection.query(sql2, function (err, results, fields) {
+                            // connection.end();
+                            connection.release();
+                        })
+                    }
+            });
         }catch(e){
             console.log(e);
         }
+
         def.resolve();
         return def.promise;
     },
@@ -90,18 +105,25 @@ var runs={
     unsubscribe:function (req) {
         var def=q.defer();
         try{
-            var data=JSON.parse(base64.decode(req.query.data))
-            var sql="update users set unsub='true',unsub_campaign="+connection.escape(data.campaign_id)+",unsub_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(data.email)
-            log.debug(sql)
-            connection.query(sql,function(err,results,fields){
-                // connection.end();
-                if(!err){
-                    def.resolve(data.email);
-                }else{
-                    def.reject({status:500,message:config.get('error.dberror')});
+            pool.getConnection(function(err, connection) {
+                if (err) {
+                    def.reject();
+                } else {
+                    var data = JSON.parse(base64.decode(req.query.data))
+                    var sql = "update users set unsub='true',unsub_campaign=" + connection.escape(data.campaign_id) + ",unsub_time=" + connection.escape(new Date()) + " where " +
+                        "email=" + connection.escape(data.email)
+                    log.debug(sql)
+                    connection.query(sql, function (err, results, fields) {
+                        // connection.end();
+                        connection.release();
+                        if (!err) {
+                            def.resolve(data.email);
+                        } else {
+                            def.reject({status: 500, message: config.get('error.dberror')});
+                        }
+                    })
                 }
-            })
+            });
         }catch(e){
             log.info(e);
             def.reject({status:500,message:config.get('error.dberror')});
@@ -111,21 +133,28 @@ var runs={
     unsubreason:function (req) {
         var def=q.defer();
         try{
-            var reason=req.body.option
-            if(req.body.option=="other"){
-                var reason=req.body.other_reason
-            }
-            var sql="update users set unsub_reason="+connection.escape(reason)+" where " +
-                "email="+connection.escape(req.body.email)
-            log.debug(sql)
-            connection.query(sql,function(err,results,fields){
-                // connection.end();
-                if(!err){
-                    def.resolve();
-                }else{
-                    def.reject({status:500,message:config.get('error.dberror')});
+            pool.getConnection(function(err, connection) {
+                if (err) {
+                    def.reject();
+                } else {
+                    var reason = req.body.option
+                    if (req.body.option == "other") {
+                        var reason = req.body.other_reason
+                    }
+                    var sql = "update users set unsub_reason=" + connection.escape(reason) + " where " +
+                        "email=" + connection.escape(req.body.email)
+                    log.debug(sql)
+                    connection.query(sql, function (err, results, fields) {
+                        // connection.end();
+                        connection.release();
+                        if (!err) {
+                            def.resolve();
+                        } else {
+                            def.reject({status: 500, message: config.get('error.dberror')});
+                        }
+                    })
                 }
-            })
+            });
         }catch(e){
             log.info(e);
             def.reject({status:500,message:config.get('error.dberror')});
@@ -135,17 +164,24 @@ var runs={
     resubscribe:function (req) {
         var def=q.defer();
         try{
-            var sql="update users set unsub='false',resub_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(req.query.email)
-            log.debug(sql)
-            connection.query(sql,function(err,results,fields){
-                // connection.end();
-                if(!err){
-                    def.resolve(req.query.email);
-                }else{
-                    def.reject({status:500,message:config.get('error.dberror')});
+            pool.getConnection(function(err, connection) {
+                if (err) {
+                    def.reject();
+                } else {
+                    var sql = "update users set unsub='false',resub_time=" + connection.escape(new Date()) + " where " +
+                        "email=" + connection.escape(req.query.email)
+                    log.debug(sql)
+                    connection.query(sql, function (err, results, fields) {
+                        // connection.end();
+                        connection.release();
+                        if (!err) {
+                            def.resolve(req.query.email);
+                        } else {
+                            def.reject({status: 500, message: config.get('error.dberror')});
+                        }
+                    })
                 }
-            })
+            });
         }catch(e){
             log.info(e);
             def.reject({status:500,message:config.get('error.dberror')});
