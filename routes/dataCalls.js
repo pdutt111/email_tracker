@@ -77,6 +77,17 @@ router.post('/sns',
         res.status(400).json(config.get("error.badrequest"));
     }
     });
+router.get('/redirector',
+    function(req,res){
+        var redirect=config.get("redirect");
+        var keys=Object.keys(redirect);
+        for(var i=0;i<keys.length;i++){
+            var re = new RegExp(keys[i],"g");
+            req.query.url=req.query.url.replace(re,redirect[keys[i]])
+        }
+        log.info(req.query.url);
+        res.redirect(req.query.url);
+    });
 router.post('/email',
     function(req,res){
         dataLogic.insertEmail(req)
