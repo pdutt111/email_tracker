@@ -77,7 +77,7 @@ router.post('/sns',
         res.status(400).json(config.get("error.badrequest"));
     }
     });
-router.get('/redirector',
+router.get('/linker',
     function(req,res){
         var redirect=config.get("redirect");
         var keys=Object.keys(redirect);
@@ -85,8 +85,15 @@ router.get('/redirector',
             var re = new RegExp(keys[i],"g");
             req.query.url=req.query.url.replace(re,redirect[keys[i]])
         }
-        log.info(req.query.url);
-        res.redirect(req.query.url);
+        if(req.query.url){
+            if(req.query.url.indexOf("http://")==-1&&req.query.url.indexOf("https://")==-1){
+                req.query.url="http://"+req.query.url;
+            }
+            log.info(req.query.url);
+            res.redirect(req.query.url);
+        }else{
+            res.end();
+        }
     });
 router.post('/email',
     function(req,res){
