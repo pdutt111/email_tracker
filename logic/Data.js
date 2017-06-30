@@ -36,6 +36,37 @@ var runs={
         def.resolve();
         return def.promise;
     },
+    clickTracker:function(req){
+        var def=q.defer();
+        try{
+            log.info(req.params);
+            var input=JSON.parse(base64.decode(req.params.data))
+            var sql="update email_campaigns set clicks=clicks+1,click_time="+connection.escape(new Date())+" where " +
+                "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
+            connection.query(sql,function(err,results,fields){
+                // connection.end();
+            })
+        }catch(e){
+            log.info(e);
+        }
+        var redirect=config.get("redirect");
+        var keys=Object.keys(redirect);
+        for(var i=0;i<keys.length;i++){
+            var re = new RegExp(keys[i],"g");
+            req.query.url=req.query.url.replace(re,redirect[keys[i]])
+        }
+        if(req.query.url){
+            if(req.query.url.indexOf("http://")==-1&&req.query.url.indexOf("https://")==-1){
+                req.query.url="http://"+req.query.url;
+            }
+            log.info(req.query.url);
+            res.redirect();
+            def.resolve(req.query.url);
+        }else{
+            def.reject();
+        }
+        return def.promise;
+    },
     addEmail:function(req){
         var def=q.defer();
         try{

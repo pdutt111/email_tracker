@@ -95,6 +95,16 @@ router.get('/linker',
             res.end();
         }
     });
+router.get('/clicker/:data',
+    function(req,res){
+        dataLogic.clickTracker(req)
+            .then(function(url){
+                res.redirect(url);
+            })
+            .catch(function(){
+                res.end();
+            })
+    });
 router.post('/email',
     function(req,res){
         dataLogic.insertEmail(req)
