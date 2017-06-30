@@ -46,24 +46,23 @@ var runs={
             connection.query(sql,function(err,results,fields){
                 // connection.end();
             })
+            var redirect=config.get("redirect");
+            var keys=Object.keys(redirect);
+            for(var i=0;i<keys.length;i++){
+                var re = new RegExp(keys[i],"g");
+                input.url=input.url.replace(re,redirect[keys[i]])
+            }
+            if(input.url){
+                if(input.url.indexOf("http://")==-1&&input.url.indexOf("https://")==-1){
+                    input.url="http://"+input.url;
+                }
+                log.info(input.url);
+                def.resolve(input.url);
+            }else{
+                def.reject();
+            }
         }catch(e){
             log.info(e);
-        }
-        var redirect=config.get("redirect");
-        var keys=Object.keys(redirect);
-        for(var i=0;i<keys.length;i++){
-            var re = new RegExp(keys[i],"g");
-            req.query.url=req.query.url.replace(re,redirect[keys[i]])
-        }
-        if(req.query.url){
-            if(req.query.url.indexOf("http://")==-1&&req.query.url.indexOf("https://")==-1){
-                req.query.url="http://"+req.query.url;
-            }
-            log.info(req.query.url);
-            res.redirect();
-            def.resolve(req.query.url);
-        }else{
-            def.reject();
         }
         return def.promise;
     },
