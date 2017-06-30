@@ -39,7 +39,7 @@ var runs={
     clickTracker:function(req){
         var def=q.defer();
         try{
-            log.info(req.params);
+            log.info(base64.decode(req.params.data));
             var input=JSON.parse(base64.decode(req.params.data))
             var sql="update email_campaigns set clicks=clicks+1,click_time="+connection.escape(new Date())+" where " +
                 "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);

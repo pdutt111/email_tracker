@@ -99,6 +99,7 @@ router.get('/clicker/:data',
     function(req,res){
         dataLogic.clickTracker(req)
             .then(function(url){
+                log.info(url);
                 res.redirect(url);
             })
             .catch(function(){
