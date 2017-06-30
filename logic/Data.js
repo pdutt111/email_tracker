@@ -26,7 +26,7 @@ var runs={
             log.info(req.params);
             var input=JSON.parse(base64.decode(req.params.pixel_name.replace(".jpg","")))
             var sql="update email_campaigns set status=1,open_time="+connection.escape(new Date())+" where " +
-                "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id);
+                "email="+connection.escape(input.email)+"and campaign_id="+connection.escape(input.campaign_id)+" and open_time is null";
             connection.query(sql,function(err,results,fields){
                 // connection.end();
             })
