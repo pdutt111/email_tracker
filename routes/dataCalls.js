@@ -100,7 +100,7 @@ router.get('/clicker/:data',
         dataLogic.clickTracker(req)
             .then(function(url){
                 log.info(url);
-                res.redirect(url);
+                res.redirect(302,url);
             })
             .catch(function(){
                 res.end();
