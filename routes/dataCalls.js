@@ -42,6 +42,16 @@ router.get('/unsubscribe',
                 res.status(err.status).json(err.message);
             });
     });
+router.post('/unsubscribe',
+    function(req,res){
+        dataLogic.unsubscribe(req)
+            .then(function(email){
+                res.end();
+            })
+            .catch(function(err){
+                res.status(err.status).json(err.message);
+            });
+    });
 router.post('/unsubreason',
     function(req,res){
         dataLogic.unsubreason(req)
