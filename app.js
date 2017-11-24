@@ -12,6 +12,7 @@ var dataCalls = require('./routes/dataCalls');
 require('./event_recievers/smsSender');
 require('./event_recievers/csv_processor');
 require('./event_recievers/snsRecievers');
+require('./event_recievers/sendgridbounces')
 var xmlparser = require('express-xml-bodyparser');
 var app = express();
 

@@ -5,7 +5,7 @@ function getBounces(offset){
     var start=Math.round((new Date())/1000-(24*60*60));
     var end=Math.round((new Date())/1000);
     var options={
-        url:"https://api.sendgrid.com/v3/suppression/bounces?start_time=" + start + "&end_time=" + end + "&offset="+offset+,
+        url:"https://api.sendgrid.com/v3/suppression/bounces?start_time=" + start + "&end_time=" + end + "&offset="+offset,
         headers:{
             "Authorization":"Bearer "+token
         },
@@ -26,7 +26,7 @@ function getSpam(offset) {
     var start = Math.round((new Date()) / 1000 - (24 * 60 * 60));
     var end = Math.round((new Date()) / 1000);
     var options = {
-        url: "https://api.sendgrid.com/v3/suppression/spam_reports?start_time=" + start + "&end_time=" + end,
+        url: "https://api.sendgrid.com/v3/suppression/spam_reports?start_time=" + start + "&end_time=" + end+ "&offset="+offset,
         headers: {
             "Authorization": "Bearer "+token
         },
@@ -35,6 +35,9 @@ function getSpam(offset) {
     request(options, function (error, response, body) {
         for(var i=0;i<body.length;i++){
             events.emitter.emit("complaint",body[i].email);
+        }
+        if(body.length==500){
+            getSpam(offset+500)
         }
     });
 }
