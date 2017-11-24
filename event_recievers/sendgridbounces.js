@@ -44,4 +44,4 @@ function getSpam(offset) {
 setInterval(function(){
     getBounces(0)
     getSpam(0)
-},5*60*60*1000)
+},30*60*1000)
