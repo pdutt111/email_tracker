@@ -13,9 +13,9 @@ function getBounces(offset){
     }
     request(options, function (error, response, body) {
         // if (error) throw new Error(error);
-        // console.log(body);
+        console.log(body.length);
         for(var i=0;i<body.length;i++){
-            events.emitter.emit("bounce",body[i].email);
+            events.emitter.emit("bounce",{destination:[body[i].email]});
         }
         if(body.length==500){
             getBounces(offset+500)
@@ -34,8 +34,9 @@ function getSpam(offset) {
     }
     request(options, function (error, response, body) {
         for(var i=0;i<body.length;i++){
-            events.emitter.emit("complaint",body[i].email);
+            events.emitter.emit("complaint",{destination:[body[i].email]});
         }
+        console.log(body.length)
         if(body.length==500){
             getSpam(offset+500)
         }
