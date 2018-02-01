@@ -116,7 +116,7 @@ router.get('/clicker/:data',
                 res.end();
             })
     });
-router.get('/sendgrid/hook/',
+router.post('/sendgrid/hook/',
     function(req,res){
         dataLogic.processdata(req)
             .then(function(url){
