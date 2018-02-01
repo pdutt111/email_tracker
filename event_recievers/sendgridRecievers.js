@@ -10,6 +10,8 @@ var connection = mysql.createConnection(config.get("mysql"));
 connection.connect();
 events.emitter.on('click',function(data){
     console.log("click event received",data);
+    data.smtp_id=data["smtp-id"];
+    delete data["smtp-id"];
     saveToDB(data)
         .then(function(){
 
