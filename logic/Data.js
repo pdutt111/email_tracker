@@ -41,6 +41,7 @@ var runs={
       var data=req.body;
       for(var i=0;i<data.length;i++) {
           events.emitter.emit(data[i].event, data[i]);
+          def.resolve();
       }
       return def.promise;
     },
