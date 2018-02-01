@@ -8,6 +8,7 @@ var mysql =require("mysql");
 var connection = mysql.createConnection(config.get("mysql"));
 connection.connect();
 events.emitter.on('click',function(data){
+    console.log("click event received",data);
     saveToDB(data)
         .then(function(){
 
