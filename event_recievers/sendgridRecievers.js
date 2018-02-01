@@ -4,6 +4,7 @@
 var config= require('config');
 var events = require('../events');
 var log = require('tracer').colorConsole(config.get('log'));
+var q=require("q");
 var mysql =require("mysql");
 var connection = mysql.createConnection(config.get("mysql"));
 connection.connect();

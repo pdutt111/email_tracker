@@ -39,6 +39,7 @@ var runs={
     processdata:function(req){
       var def=q.defer();
       var data=req.body;
+      console.log(data);
       for(var i=0;i<data.length;i++) {
           events.emitter.emit(data[i].event, data[i]);
           def.resolve();
