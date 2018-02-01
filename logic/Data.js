@@ -41,9 +41,11 @@ var runs={
       var data=req.body;
       console.log(data);
       for(var i=0;i<data.length;i++) {
-          events.emitter.emit(data[i].event, data[i]);
-          def.resolve();
+          if(data[i].event=="click"){
+              events.emitter.emit(data[i].event, data[i]);
+          }
       }
+        def.resolve();
       return def.promise;
     },
     clickTracker:function(req){
