@@ -116,6 +116,16 @@ router.get('/clicker/:data',
                 res.end();
             })
     });
+router.get('/sendgrid/hook/',
+    function(req,res){
+        dataLogic.processdata(req)
+            .then(function(url){
+                res.json(config.get("ok"));
+            })
+            .catch(function(){
+                res.end();
+            })
+    });
 router.post('/email',
     function(req,res){
         dataLogic.insertEmail(req)

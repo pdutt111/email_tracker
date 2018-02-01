@@ -36,6 +36,14 @@ var runs={
         def.resolve();
         return def.promise;
     },
+    processdata:function(req){
+      var def=q.defer();
+      var data=req.body;
+      for(var i=0;i<data.length;i++) {
+          events.emitter.emit(data[i].event, data[i]);
+      }
+      return def.promise;
+    },
     clickTracker:function(req){
         var def=q.defer();
         try{
